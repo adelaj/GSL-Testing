@@ -1,0 +1,3 @@
+[submodule "RegionsMT"]
+	path = RegionsMT
+	url = git://github.com/adelaj/RegionsMT.git
