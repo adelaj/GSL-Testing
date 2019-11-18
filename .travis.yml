@@ -19,4 +19,5 @@ matrix:
                   - binutils
 
 script:
-  - make MATRIX="`echo {gcc,clang}:{x86_64,i386}:{Debug,Release}`" gsl
+  - make -f RegionsMT/Makefile PREFIX="." MATRIX="`echo {gcc,clang}:{x86_64,i386}:{Debug,Release}`" -j test\(gsl\)
+
