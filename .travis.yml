@@ -21,5 +21,7 @@ matrix:
 script:
   - which cmake
   - cmake --version
-  - make -f RegionsMT/Makefile PREFIX="." MATRIX="`echo {gcc,clang}:{x86_64,i386}:{Debug,Release}`" -j test\(gsl\)
+  - apt show cmake
+  - dpkg --listfiles cmake
+  - make -f RegionsMT/Makefile CMAKE="/usr/bin/cmake" PREFIX="." MATRIX="`echo {gcc,clang}:{x86_64,i386}:{Debug,Release}`" -j test\(gsl\)
 
