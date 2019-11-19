@@ -19,5 +19,5 @@ matrix:
                   - binutils
 
 script:
-  - make -f RegionsMT/Makefile CMAKE="/usr/bin/cmake" PREFIX="." MATRIX="`echo {gcc}:{x86_64,i386}:{Debug,Release}`" -j test\(gsl\)
+  - make -f RegionsMT/Makefile CMAKE="/usr/bin/cmake" PREFIX="." MATRIX="`echo gcc:{x86_64,i386}:{Debug,Release}`" -j test\(gsl\)
 
