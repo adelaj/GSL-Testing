@@ -22,7 +22,7 @@ matrix:
                   - llvm-8
                   - llvm-8-dev
         before_script:
-          - git submodule foreach git pull
+          - git submodule foreach git pull origin master
         script:
           - export CMAKE="/usr/bin/cmake" PREFIX="." TOOLCHAIN="clang:clang-8" MATRIX="`echo {clang,gcc}:{x86_64,i386}:{Debug,Release}`"
           - make -f RegionsMT/Makefile -j all\(gsl\)
