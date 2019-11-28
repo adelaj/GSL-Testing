@@ -7,6 +7,9 @@ for:
     environment:
         MSYSTEM: MINGW64
         MSYS2_ARG_CONV_EXCL: \*
+    
+    install:
+        git submodule foreach git pull origin master
       
     before_build:
       - C:\msys64\usr\bin\bash.exe -lc 'pacman -Syu --noconfirm'
