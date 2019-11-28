@@ -5,8 +5,8 @@ for:
     image: Visual Studio 2019
     
     environment:
-      - MSYSTEM: MINGW64
-      - MSYS2_ARG_CONV_EXCL: \*
+        MSYSTEM: MINGW64
+        MSYS2_ARG_CONV_EXCL: \*
       
     before_build:
       - C:\msys64\usr\bin\bash.exe -lc 'pacman -Syu --noconfirm'
