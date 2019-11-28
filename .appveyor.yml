@@ -9,12 +9,12 @@ for:
         MSYS2_ARG_CONV_EXCL: \*
     
     install:
-        git submodule foreach git pull origin master
-      
-    before_build:
       - C:\msys64\usr\bin\bash.exe -lc 'pacman -Syu --noconfirm'
       - C:\msys64\usr\bin\bash.exe -lc 'pacman -Syu --noconfirm'
       - C:\msys64\usr\bin\bash.exe -lc 'pacman -S --noconfirm mingw-w64-x86_64-toolchain make'
+    
+    before_build:
+      - git submodule foreach git pull origin master
     
     build_script:
       - ps: |
@@ -22,4 +22,5 @@ for:
             $env:MSYS2_WD=C:\msys64\usr\bin\bash.exe -c 'pwd'
             C:\msys64\usr\bin\bash.exe -lc '\
             export PATH=\"$MSYS2_PATH:$PATH\" PREFIX=\"$MSYS2_WD\" MATRIX=\"msvc:x64:Debug\" && \
-            mingw32-make -f $MSYS2_WD/RegionsMT/Makefile -n -j all\(gsl\)'
+            mingw32-make -f $MSYS2_WD/RegionsMT/Makefile -j all\(gsl\) && \
+            (mingw32-make -f RegionsMT/Makefile -j -k test\(gsl\) || true)'
