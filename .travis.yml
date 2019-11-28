@@ -21,10 +21,15 @@ matrix:
                   - clang-8
                   - llvm-8
                   - llvm-8-dev
+        env:
+          - TARGET=""
+          - CMAKE="/usr/bin/cmake"
+          - PREFIX="."
+          - TOOLCHAIN="clang:clang-8"
+          - MATRIX="`echo {clang,gcc}:{x86_64,i386}:{Debug,Release}`"
         before_script:
           - git submodule foreach git pull origin master
         script:
-          - export TARGET="" CMAKE="/usr/bin/cmake" PREFIX="." TOOLCHAIN="clang:clang-8" MATRIX="`echo {clang,gcc}:{x86_64,i386}:{Debug,Release}`"
           - make -f RegionsMT/Makefile -j all\(gsl\)
           - make -f RegionsMT/Makefile -j -k test\(gsl\) || true
           - make -f RegionsMT/Makefile -j CLEAN="git(gsl) all(gsl)" clean
