@@ -14,4 +14,13 @@ for:
       - C:\msys64\usr\bin\bash.exe -lc 'pacman -S --noconfirm mingw-w64-x86_64-toolchain make'
     
     build_script:
+      - ps: |
+            $env:MSYS2_PATH=C:\msys32\usr\bin\bash.exe -c 'echo $PATH'
+            $env:MSYS2_WD=C:\msys32\usr\bin\bash.exe -c 'pwd'
+            C:\msys32\usr\bin\bash.exe -lc '
+            PATH=$MSYS2_PATH:$PATH
+            mingw32-make -f $MSYS2_WD/RegionsMT/Makefile
+            PREFIX=\"$MSYS2_WD/..\"
+            MATRIX=\"msvc:x64:Debug\"
+            -n -j all\(gsl\)'
       - C:\msys64\usr\bin\bash.exe -lc 'echo $MSYSTEM'
