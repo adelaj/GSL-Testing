@@ -1,35 +1,44 @@
 clone_depth: 1
 
 for:
-  -
+  - 
     image: Visual Studio 2019
     
     environment:
-        MSYSTEM: MINGW64
-    
-    install:
-      - C:\msys64\usr\bin\bash.exe -lc 'pacman -Syu --noconfirm'
-      - C:\msys64\usr\bin\bash.exe -lc 'pacman -Syu --noconfirm'
-      - C:\msys64\usr\bin\bash.exe -lc 'pacman -S --noconfirm mingw-w64-x86_64-toolchain make'
+        CHERE_INVOKING: 1
+        matrix:
+          - MSYSTEM: MSYS2
+          - MSYSTEM: MINGW32
+          - MSYSTEM: MINGW64
     
     before_build:
       - git submodule update --init --recursive
       - git submodule foreach git pull origin master
       - ps: |
-            $env:MSYS2_PATH=C:\msys64\usr\bin\bash.exe -c 'echo $PATH'
-            $env:MSYS2_WD=C:\msys64\usr\bin\bash.exe -c 'pwd'
-            $env:PREFIX=$env:MSYS2_WD
-            $env:MATRIX=C:\msys64\usr\bin\bash.exe -c 'echo msvc:{x64,Win32}:{Debug,Release}'
             $env:TARGET=""
+            $env:PREFIX="."
     
-    build_script:
-      - ps: |
-            C:\msys64\usr\bin\bash.exe -lc '\
-            PATH=\"$MSYS2_PATH:$PATH\" \
-            mingw32-make -f $MSYS2_WD/RegionsMT/Makefile -j all\(gsl\)'
+    for:
+      -
+        matrix:
+            only:
+              - MSYSTEM: MSYS2
+              
+        install:
+          - ps: |
+                C:\msys64\usr\bin\bash.exe -lc 'pacman -Syu --noconfirm'
+                C:\msys64\usr\bin\bash.exe -lc 'pacman -Syu --noconfirm'
+                C:\msys64\usr\bin\bash.exe -lc 'pacman -S --noconfirm --needed make'
+                
+        build_script:
+          - ps: |
+                $env:GIT=C:\msys64\usr\bin\bash.exe -c '/usr/bin/which git'
+                $env:CMAKE=C:\msys64\usr\bin\bash.exe -c '/usr/bin/which cmake'
+                $env:MATRIX=C:\msys64\usr\bin\bash.exe -c 'echo msvc:{x64,Win32}:{Debug,Release}'
+                C:\msys64\usr\bin\bash.exe -lc 'make -f RegionsMT/Makefile -j all\(gsl\)'
             
-    test_script:
-      - ps: |
-            C:\msys64\usr\bin\bash.exe -lc '\
-            PATH=\"$MSYS2_PATH:$PATH\" \
-            mingw32-make -f $MSYS2_WD/RegionsMT/Makefile -j -k test\(gsl\) || true'
+        test_script:
+          - ps: C:\msys64\usr\bin\bash.exe -lc 'make -f RegionsMT/Makefile -j -k test\(gsl\) || true'
+            
+        after_test:
+          - ps: C:\msys64\usr\bin\bash.exe -lc 'make -f RegionsMT/Makefile -j CLEAN=git\(gsl\)\ all\(gsl\) clean'
