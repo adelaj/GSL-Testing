@@ -9,10 +9,6 @@ environment:
       - MSYSTEM: MINGW32
       - MSYSTEM: MINGW64
 
-before_build:
-  - git submodule update --init --recursive
-  - git submodule foreach git pull origin master
-
 for:
   -
     matrix:
@@ -23,7 +19,11 @@ for:
       - C:\msys64\usr\bin\bash.exe -lc 'pacman -Syu --noconfirm'
       - C:\msys64\usr\bin\bash.exe -lc 'pacman -Syu --noconfirm'
       - C:\msys64\usr\bin\bash.exe -lc 'pacman -S --noconfirm --needed make'
-                
+   
+    before_build:
+      - git submodule update --init --recursive
+      - git submodule foreach git pull origin master
+   
     build_script:
       - ps: |
             $env:TARGET=""
