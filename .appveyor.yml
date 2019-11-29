@@ -4,7 +4,6 @@ image: Visual Studio 2019
 
 environment:
     CHERE_INVOKING: 1
-    MSYS2_ARG_CONV_EXCL: \*
     matrix:
       - MSYSTEM: MSYS2
       - MSYSTEM: MINGW32
@@ -21,11 +20,12 @@ for:
           - MSYSTEM: MSYS2
               
     install:
-      - C:\msys64\usr\bin\bash.exe -lc 'pacman -Syu --noconfirm'
-      - C:\msys64\usr\bin\bash.exe -lc 'pacman -Syu --noconfirm'
-      - C:\msys64\usr\bin\bash.exe -lc 'pacman -S --noconfirm --needed make'
+      #- C:\msys64\usr\bin\bash.exe -lc 'pacman -Syu --noconfirm'
+      #- C:\msys64\usr\bin\bash.exe -lc 'pacman -Syu --noconfirm'
+      #- C:\msys64\usr\bin\bash.exe -lc 'pacman -S --noconfirm --needed make'
     
     build_script:
+      - ps: $env:MSYS2_ARG_CONV_EXCL="*"
       - ps: echo $env:MSYS2_ARG_CONV_EXCL
       - ps: C:\msys64\usr\bin\bash.exe -c 'echo \"$MSYS2_ARG_CONV_EXCL\"'
       - ps: |
