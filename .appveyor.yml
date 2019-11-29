@@ -26,6 +26,8 @@ for:
       - C:\msys64\usr\bin\bash.exe -lc 'pacman -S --noconfirm --needed make'
     
     build_script:
+      - ps: echo $env:MSYS2_ARG_CONV_EXCL
+      - ps: C:\msys64\usr\bin\bash.exe -c 'echo \"$MSYS2_ARG_CONV_EXCL\"'
       - ps: |
             $env:TARGET=""
             $env:PREFIX="."
