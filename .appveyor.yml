@@ -4,6 +4,7 @@ image: Visual Studio 2019
 
 environment:
     CHERE_INVOKING: 1
+    SYS2_ARG_CONV_EXCL: *
     matrix:
       - MSYSTEM: MSYS2
       - MSYSTEM: MINGW32
