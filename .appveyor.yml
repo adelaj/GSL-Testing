@@ -8,6 +8,15 @@ environment:
       - MSYSTEM: MINGW32
       - MSYSTEM: MINGW64
 
+install:
+  - ps: |
+        $env:ARCH=C:\msys64\usr\bin\bash.exe -c 'uname -m'
+        $env:MATRIX=C:\msys64\usr\bin\bash.exe -c 'echo gcc:$ARCH:{Debug,Release}'
+        $env:MAKE="mingw32-make"
+  - C:\msys64\usr\bin\bash.exe -lc 'pacman -Syu --noconfirm'
+  - C:\msys64\usr\bin\bash.exe -lc 'pacman -Syu --noconfirm'
+  - C:\msys64\usr\bin\bash.exe -lc 'pacman -S --noconfirm --needed mingw-w64-$ARCH-gcc mingw-w64-$ARCH-make mingw-w64-$ARCH-cmake'
+
 before_build:
   - git submodule update --init --recursive
   - git submodule foreach git pull origin master
@@ -16,6 +25,16 @@ before_build:
         $env:PREFIX="."
         $env:CHERE_INVOKING="1"
         $env:MSYS2_ARG_CONV_EXCL="*"
+        $env:GIT=C:\msys64\usr\bin\bash.exe -c '/usr/bin/which git'
+        
+build_script:
+  - C:\msys64\usr\bin\bash.exe -lc '$MAKE -f RegionsMT/Makefile -j all\(gsl\)'
+
+test_script:
+  - C:\msys64\usr\bin\bash.exe -lc '$MAKE -f RegionsMT/Makefile -j -k test\(gsl\) || true'
+            
+after_test:
+  - C:\msys64\usr\bin\bash.exe -lc '$MAKE -f RegionsMT/Makefile -j CLEAN=git\(gsl\)\ all\(gsl\) clean'
 
 for:
   -
@@ -24,35 +43,10 @@ for:
           - MSYSTEM: MSYS2
 
     install:
+     - ps: |
+           $env:CMAKE=C:\msys64\usr\bin\bash.exe -c '/usr/bin/which cmake'
+           $env:MATRIX=C:\msys64\usr\bin\bash.exe -c 'echo msvc:{x64,Win32}:{Debug,Release}'
+           $env:MAKE="make"
     # - C:\msys64\usr\bin\bash.exe -lc 'pacman -Syu --noconfirm'
     # - C:\msys64\usr\bin\bash.exe -lc 'pacman -Syu --noconfirm'
-    # - C:\msys64\usr\bin\bash.exe -lc 'pacman -S --noconfirm --needed make'
-    
-    build_script:
-      - ps: |
-            $env:GIT=C:\msys64\usr\bin\bash.exe -c '/usr/bin/which git'
-            $env:CMAKE=C:\msys64\usr\bin\bash.exe -c '/usr/bin/which cmake'
-            $env:MATRIX=C:\msys64\usr\bin\bash.exe -c 'echo msvc:{x64,Win32}:{Debug,Release}'
-            C:\msys64\usr\bin\bash.exe -lc 'make -f RegionsMT/Makefile -j all\(gsl\)'
-            
-    test_script:
-      - ps: C:\msys64\usr\bin\bash.exe -lc 'make -f RegionsMT/Makefile -j -k test\(gsl\) || true'
-            
-    after_test:
-      - ps: C:\msys64\usr\bin\bash.exe -lc 'make -f RegionsMT/Makefile -j CLEAN=git\(gsl\)\ all\(gsl\) clean'
-      
-  - 
-    matrix:
-        only:
-          - MSYSTEM: MINGW32
-          
-    build_script:
-        echo $MSYSTEM
-
-  - 
-    matrix:
-        only:
-          - MSYSTEM: MINGW64
-          
-    build_script:
-        echo $MSYSTEM
+    # - C:\msys64\usr\bin\bash.exe -lc 'pacman -S --noconfirm --needed make'\
