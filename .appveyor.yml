@@ -38,3 +38,19 @@ for:
             
     after_test:
       - ps: C:\msys64\usr\bin\bash.exe -lc 'make -f RegionsMT/Makefile -j CLEAN=git\(gsl\)\ all\(gsl\) clean'
+      
+ - 
+    matrix:
+        only:
+          - MSYSTEM: MINGW32
+          
+    build_script:
+        echo $MSYSTEM
+
+  - 
+    matrix:
+        only:
+          - MSYSTEM: MINGW64
+          
+    build_script:
+        echo $MSYSTEM
