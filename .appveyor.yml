@@ -4,7 +4,7 @@ image: Visual Studio 2019
 
 environment:
     matrix:
-    # - MSYSTEM: MSYS2
+      - MSYSTEM: MSYS2
       - MSYSTEM: MINGW32
         ARCH: i686
       - MSYSTEM: MINGW64
@@ -16,7 +16,7 @@ install:
         $env:MAKE="mingw32-make"
   - C:\msys64\usr\bin\bash.exe -lc 'pacman -Syu --noconfirm'
   - C:\msys64\usr\bin\bash.exe -lc 'pacman -Syu --noconfirm'
-  - C:\msys64\usr\bin\bash.exe -lc 'pacman -S --noconfirm --needed mingw-w64-$ARCH-gcc mingw-w64-$ARCH-binutils mingw-w64-$ARCH-make mingw-w64-$ARCH-cmake'
+  - C:\msys64\usr\bin\bash.exe -lc 'pacman -S --noconfirm --needed mingw-w64-$ARCH-gcc mingw-w64-$ARCH-make mingw-w64-$ARCH-cmake'
 
 before_build:
   - git submodule update --init --recursive
@@ -27,7 +27,6 @@ build_script:
         $env:TARGET=""
         $env:PREFIX="."
         $env:CHERE_INVOKING="1"
-        $env:MSYS2_ARG_CONV_EXCL="*"
         $env:GIT=C:\msys64\usr\bin\bash.exe -c '/usr/bin/which git'
   - C:\msys64\usr\bin\bash.exe -lc '$MAKE -f RegionsMT/Makefile -j all\(gsl\)'
 
@@ -45,6 +44,7 @@ for:
 
     install:
      - ps: |
+           $env:MSYS2_ARG_CONV_EXCL="*"
            $env:CMAKE=C:\msys64\usr\bin\bash.exe -c '/usr/bin/which cmake'
            $env:MATRIX=C:\msys64\usr\bin\bash.exe -c 'echo msvc:{x64,Win32}:{Debug,Release}'
            $env:MAKE="make"
