@@ -31,7 +31,7 @@ build_script:
   - C:\msys64\usr\bin\bash.exe -lc '$MAKE -f RegionsMT/Makefile -j all\(gsl\)'
 
 test_script:
-  - C:\msys64\usr\bin\bash.exe -lc '$MAKE -f RegionsMT/Makefile -j -k test\(gsl\) || true'
+  - C:\msys64\usr\bin\bash.exe -lc "$MAKE -f RegionsMT/Makefile -j -k test\(gsl\) || true"
             
 after_test:
   - C:\msys64\usr\bin\bash.exe -lc '$MAKE -f RegionsMT/Makefile -j CLEAN=git\(gsl\)\ all\(gsl\) clean'
