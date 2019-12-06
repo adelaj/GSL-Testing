@@ -28,13 +28,13 @@ build_script:
         $env:PREFIX="."
         $env:CHERE_INVOKING="1"
         $env:GIT=C:\msys64\usr\bin\bash.exe -c '/usr/bin/which git'
-  - C:\msys64\usr\bin\bash.exe -lc "$MAKE -f RegionsMT/Makefile -j all\(gsl\)"
+  - C:\msys64\usr\bin\bash.exe -lc "$MAKE -f RegionsMT/Makefile --warn-undefined-variables -j 'all(gsl)'"
 
 test_script:
-  - C:\msys64\usr\bin\bash.exe -lc "$MAKE -f RegionsMT/Makefile -j -k test\(gsl\) || true"
+  - C:\msys64\usr\bin\bash.exe -lc "$MAKE -f RegionsMT/Makefile --warn-undefined-variables -j -k 'test(gsl)' || true"
             
 after_test:
-  - C:\msys64\usr\bin\bash.exe -lc "$MAKE -f RegionsMT/Makefile -j CLEAN=git\(gsl\)\ all\(gsl\) clean"
+  - C:\msys64\usr\bin\bash.exe -lc "$MAKE -f RegionsMT/Makefile --warn-undefined-variables -j CLEAN='git(gsl) all(gsl)' clean"
 
 for:
   -

@@ -30,7 +30,7 @@ matrix:
         before_script:
           - git submodule foreach git pull origin master
         script:
-          - make -f RegionsMT/Makefile -j all\(gsl\)
-          - make -f RegionsMT/Makefile -j -k test\(gsl\) || true
+          - make -f RegionsMT/Makefile --warn-undefined-variables -j "all(gsl)"
+          - make -f RegionsMT/Makefile --warn-undefined-variables -j -k "test(gsl)" || true
         after_script:
-          - make -f RegionsMT/Makefile -j CLEAN=git\(gsl\)\ all\(gsl\) clean
+          - make -f RegionsMT/Makefile --warn-undefined-variables -j CLEAN="git(gsl) all(gsl)" clean
